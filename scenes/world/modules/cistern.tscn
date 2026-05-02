@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cistern"]
+[gd_scene load_steps=7 format=3 uid="uid://cistern"]
 
 [ext_resource type="Script" uid="uid://bbgxvfsmlqkge" path="res://scenes/world/modules/SewModuleBase.gd" id="1"]
+[ext_resource type="Shader" path="res://shaders/water_channel.gdshader" id="2"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 size = Vector3(14, 0.3, 14)
@@ -11,6 +12,20 @@ size = Vector3(10, 0.1, 10)
 [sub_resource type="BoxShape3D" id="BoxShape_floor"]
 size = Vector3(14, 0.3, 14)
 
+[sub_resource type="StandardMaterial3D" id="FloorMat_cistern"]
+albedo_color = Color(0.494, 0.659, 0.604, 1)
+roughness = 0.9
+metallic = 0.0
+
+[sub_resource type="ShaderMaterial" id="WaterMat_1"]
+shader = ExtResource("2")
+shader_parameter/shallow_color = Color(0.42, 0.62, 0.67, 0.75)
+shader_parameter/deep_color = Color(0.17, 0.17, 0.31, 0.90)
+shader_parameter/depth_blend = 0.5
+shader_parameter/normal_strength = 0.6
+shader_parameter/specular_strength = 0.6
+shader_parameter/roughness = 0.15
+
 [node name="cistern" type="Node3D"]
 script = ExtResource("1")
 module_id = "cistern"
@@ -20,10 +35,12 @@ can_host_job = true
 [node name="FloorMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_floor")
 position = Vector3(0, -0.15, 0)
+surface_material_override/0 = SubResource("FloorMat_cistern")
 
 [node name="WaterSurface" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_water")
 position = Vector3(0, -0.5, 0)
+surface_material_override/0 = SubResource("WaterMat_1")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 

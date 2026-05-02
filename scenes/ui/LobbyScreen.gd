@@ -72,8 +72,11 @@ func _refresh_player_list(_id: int) -> void:
 func _on_ready() -> void:
 	_ready_btn.disabled = true
 	NetworkManager.signal_ready()
-	# Register role choice with host
-	_register_role.rpc_id(1, multiplayer.get_unique_id(), _selected_role)
+	var pid := multiplayer.get_unique_id()
+	if multiplayer.is_server():
+		GameManager.player_roles[pid] = _selected_role
+	else:
+		_register_role.rpc_id(1, pid, _selected_role)
 
 
 @rpc("any_peer", "reliable")
@@ -86,6 +89,10 @@ func _register_role(peer_id: int, role_id: StringName) -> void:
 func _on_start() -> void:
 	if not NetworkManager.is_host:
 		return
+	# Ensure host's role is registered even if they skipped READY
+	var pid := multiplayer.get_unique_id()
+	if pid not in GameManager.player_roles:
+		GameManager.player_roles[pid] = _selected_role
 	GameManager.start_run(GameManager.player_roles)
 
 

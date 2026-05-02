@@ -38,7 +38,7 @@ func _process(_delta: float) -> void:
 			_handle_signal_message(JSON.parse_string(pkt.get_string_from_utf8()))
 
 
-# ── Public API ────────────────────────────────────────────────────────────────
+# ── Public API ────────────────────────────────────────────────────────────────────
 
 func create_room() -> void:
 	is_host = true
@@ -56,6 +56,8 @@ func join_room(code: String) -> void:
 
 
 func signal_ready() -> void:
+	if room_code == "SOLO":
+		return
 	_ws_send({"type": "ready"})
 
 
@@ -69,7 +71,7 @@ func disconnect_from_room() -> void:
 	local_peer_id = 0
 
 
-# ── Signaling ─────────────────────────────────────────────────────────────────
+# ── Signaling ────────────────────────────────────────────────────────────────────
 
 func _connect_to_signal_server() -> void:
 	_ws = WebSocketPeer.new()
@@ -130,7 +132,7 @@ func _handle_signal_message(msg: Dictionary) -> void:
 			connection_failed.emit(msg.get("message", "Unknown error"))
 
 
-# ── WebRTC setup ──────────────────────────────────────────────────────────────
+# ── WebRTC setup ────────────────────────────────────────────────────────────────────
 
 func _init_rtc_host() -> void:
 	_rtc.create_server()
