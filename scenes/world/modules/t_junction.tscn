@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsu4xrgv32ilu"]
+
+[ext_resource type="Script" uid="uid://bbgxvfsmlqkge" path="res://scenes/world/modules/SewModuleBase.gd" id="1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(12, 3, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape_1"]
+size = Vector3(12, 3, 8)
+
+[node name="t_junction" type="Node3D"]
+script = ExtResource("1")
+module_id = "t_junction"
+prop_slots = 2
+can_host_job = false
+
+[node name="FloorMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape_1")
+
+[node name="PropSlots" type="Node3D" parent="."]
+
+[node name="Slot0" type="Marker3D" parent="PropSlots"]
+position = Vector3(-4, 0, -2)
+
+[node name="Slot1" type="Marker3D" parent="PropSlots"]
+position = Vector3(4, 0, -2)
+
+[node name="JobAnchor" type="Marker3D" parent="."]

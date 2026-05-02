@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwmht3he3qfem"]
+
+[ext_resource type="Script" uid="uid://nwpd676ed4d6" path="res://scenes/jobs/ScrapeCurseMoss.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://ce1qu7bom2u7n" path="res://scenes/jobs/JobBase.tscn" id="2"]
+
+[node name="ScrapeCurseMoss" instance=ExtResource("2")]
+script = ExtResource("1")

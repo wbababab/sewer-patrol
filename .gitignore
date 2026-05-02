@@ -1,0 +1,18 @@
+# Godot 4
+.godot/
+*.uid
+
+# Export
+export/
+*.pck
+*.apk
+*.aab
+*.ipa
+
+# Node.js signaling server
+signaling_server/node_modules/
+signaling_server/.env
+
+# OS
+.DS_Store
+Thumbs.db

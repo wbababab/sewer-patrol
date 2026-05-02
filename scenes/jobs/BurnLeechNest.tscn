@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cem7dm3qm7w2a"]
+
+[ext_resource type="Script" uid="uid://x8uftnoqlj74" path="res://scenes/jobs/BurnLeechNest.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/jobs/JobBase.tscn" id="2"]
+
+[node name="BurnLeechNest" instance=ExtResource("2")]
+script = ExtResource("1")

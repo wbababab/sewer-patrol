@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceukp600jaejy"]
+
+[ext_resource type="Script" uid="uid://crxe4j37d7wxw" path="res://scenes/player/RatCatcher.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bgqyuvvb3p43x" path="res://scenes/player/PlayerBase.tscn" id="2"]
+
+[node name="RatCatcher" instance=ExtResource("2")]
+script = ExtResource("1")

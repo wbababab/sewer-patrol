@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=3 uid="uid://cnti7wfbtyoht"]
+
+[ext_resource type="Script" uid="uid://j1idhy6w5cs7" path="res://scenes/world/SewerLevel.gd" id="1"]
+[ext_resource type="Script" path="res://scenes/world/ExitDoor.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://hud" path="res://scenes/ui/HUD.tscn" id="3"]
+[ext_resource type="Resource" path="res://scenes/world/default_environment.tres" id="4"]
+
+[sub_resource type="NavigationMesh" id="NavMesh_1"]
+agent_height = 1.8
+agent_radius = 0.4
+agent_max_climb = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_exit"]
+size = Vector3(4, 3, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape_exit"]
+size = Vector3(4, 3, 0.4)
+
+[sub_resource type="SphereShape3D" id="SphereShape_exit_trigger"]
+radius = 2.5
+
+[node name="SewerLevel" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.353, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 0)
+light_energy = 0.3
+light_color = Color(0.6, 0.65, 0.8, 1)
+shadow_enabled = true
+
+[node name="Rooms" type="Node3D" parent="."]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavMesh_1")
+
+[node name="PlayerSpawnPoints" type="Node3D" parent="."]
+
+[node name="SpawnPoint0" type="Marker3D" parent="PlayerSpawnPoints"]
+position = Vector3(0, 0.1, 1)
+
+[node name="SpawnPoint1" type="Marker3D" parent="PlayerSpawnPoints"]
+position = Vector3(2, 0.1, 0)
+
+[node name="SpawnPoint2" type="Marker3D" parent="PlayerSpawnPoints"]
+position = Vector3(-2, 0.1, 0)
+
+[node name="SpawnPoint3" type="Marker3D" parent="PlayerSpawnPoints"]
+position = Vector3(0, 0.1, -2)
+
+[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath(".")
+spawn_limit = 4
+
+[node name="JobSpawner" type="MultiplayerSpawner" parent="."]
+spawn_path = NodePath(".")
+spawn_limit = 16
+
+[node name="ExitDoor" type="StaticBody3D" parent="."]
+script = ExtResource("2")
+position = Vector3(0, 0, -20)
+
+[node name="ExitMesh" type="MeshInstance3D" parent="ExitDoor"]
+mesh = SubResource("BoxMesh_exit")
+
+[node name="ExitCollision" type="CollisionShape3D" parent="ExitDoor"]
+shape = SubResource("BoxShape_exit")
+
+[node name="ExitTrigger" type="Area3D" parent="ExitDoor"]
+collision_layer = 0
+collision_mask = 2
+
+[node name="ExitTriggerShape" type="CollisionShape3D" parent="ExitDoor/ExitTrigger"]
+shape = SubResource("SphereShape_exit_trigger")
+
+[node name="Label3D" type="Label3D" parent="ExitDoor"]
+position = Vector3(0, 1.8, 0)
+text = "EXIT — LOCKED"
+font_size = 14
+billboard = 1
+
+[node name="HUD" instance=ExtResource("3")]
