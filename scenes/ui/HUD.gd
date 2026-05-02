@@ -5,6 +5,8 @@ extends CanvasLayer
 @onready var _room_code_label: Label = $HUDRoot/RoomCode
 @onready var _exit_hint: Label = $HUDRoot/ExitHint
 
+var _local_player: PlayerBase = null
+
 
 func _ready() -> void:
 	GameManager.job_completed.connect(_on_job_completed)
@@ -12,14 +14,17 @@ func _ready() -> void:
 	_room_code_label.text = NetworkManager.room_code
 	_exit_hint.visible = false
 
-	# Build initial job tracker from active jobs
+	# Jobs are registered in SewerLevel._ready() which runs after HUD._ready();
+	# wait one frame so the job list is populated before building the UI.
 	await get_tree().process_frame
 	_rebuild_job_list()
+	_local_player = GameManager.players.get(multiplayer.get_unique_id()) as PlayerBase
 
-	# Connect local player health
-	var local_player: PlayerBase = GameManager.players.get(multiplayer.get_unique_id())
-	if local_player:
-		local_player.property_list_changed.connect(_update_health)
+
+func _process(_delta: float) -> void:
+	if _local_player:
+		_health_bar.value = _local_player.health
+		_health_bar.max_value = _local_player.role_data.max_health if _local_player.role_data else 100
 
 
 func _rebuild_job_list() -> void:
@@ -44,17 +49,9 @@ func _on_job_completed(job_id: StringName) -> void:
 		icon.text = "[x]"
 		icon.modulate = Color(0.5, 1.0, 0.5)
 
-	# Check if exit is now available
 	if GameManager.completed_jobs.size() >= GameManager.required_jobs:
 		_exit_hint.visible = true
 		_exit_hint.text = "Exit unlocked — head to the surface!"
-
-
-func _update_health() -> void:
-	var player := GameManager.players.get(multiplayer.get_unique_id()) as PlayerBase
-	if player:
-		_health_bar.value = player.health
-		_health_bar.max_value = player.role_data.max_health if player.role_data else 100
 
 
 func _on_run_finished(report: Dictionary) -> void:

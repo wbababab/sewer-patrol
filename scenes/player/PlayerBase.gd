@@ -35,6 +35,7 @@ func _ready() -> void:
 	if role_data:
 		health = role_data.max_health
 		_name_label.text = _get_role_display()
+		_apply_role_color()
 
 	add_to_group("players")
 
@@ -139,6 +140,17 @@ func get_debrief_stats() -> Dictionary:
 
 func _get_role_display() -> String:
 	return role_data.display_name if role_data else "Cesswarden"
+
+
+func _apply_role_color() -> void:
+	var mesh_inst := _mesh.get_node_or_null("MeshInstance3D") as MeshInstance3D
+	if not mesh_inst or not role_data:
+		return
+	var mat := mesh_inst.get_surface_override_material(0)
+	if mat:
+		var unique_mat := mat.duplicate() as ShaderMaterial
+		unique_mat.set_shader_parameter("albedo_tint", role_data.role_color)
+		mesh_inst.set_surface_override_material(0, unique_mat)
 
 
 func apply_knockback(impulse: Vector3) -> void:
