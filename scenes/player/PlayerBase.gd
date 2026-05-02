@@ -58,13 +58,15 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# Send input to host
-	if not multiplayer.is_server():
-		_send_input.rpc_id(1, move_dir, Input.is_action_just_pressed("interact"), Input.is_action_just_pressed("special"))
-
 	# Interact
 	if Input.is_action_just_pressed("interact"):
 		_try_interact()
+
+	# Wiggle inputs — forwarded to active job
+	if Input.is_action_just_pressed("wiggle_left"):
+		_forward_wiggle(&"left")
+	if Input.is_action_just_pressed("wiggle_right"):
+		_forward_wiggle(&"right")
 
 	# Special ability
 	_special_timer = max(0.0, _special_timer - delta)
@@ -75,18 +77,34 @@ func _physics_process(delta: float) -> void:
 	current_state = &"moving" if wish_dir.length() > 0.1 else &"idle"
 
 
-@rpc("any_peer", "unreliable")
-func _send_input(move_dir: Vector2, wish_interact: bool, wish_special: bool) -> void:
-	# Host processes authoritative logic from client input
-	pass  # Movement handled directly since clients run physics locally
-
-
 func _try_interact() -> void:
 	if _nearby_jobs.is_empty():
 		return
-	var job = _nearby_jobs[0]
-	if job.can_interact(self):
-		job.start_or_join(get_multiplayer_authority())
+	var job := _nearby_jobs[0] as JobBase
+	if not job.can_interact(self):
+		return
+	var pid := get_multiplayer_authority()
+	if pid not in job.participating_players:
+		if multiplayer.is_server():
+			job.start_or_join(pid)
+		else:
+			job.request_join.rpc_id(1, pid)
+	else:
+		if multiplayer.is_server():
+			job._handle_press(pid)
+		else:
+			job.request_press.rpc_id(1, pid)
+
+
+func _forward_wiggle(direction: StringName) -> void:
+	var pid := get_multiplayer_authority()
+	for job: JobBase in _nearby_jobs:
+		if pid in job.participating_players:
+			if multiplayer.is_server():
+				job._handle_wiggle(pid, direction)
+			else:
+				job.request_wiggle.rpc_id(1, pid, direction)
+			break
 
 
 func _on_job_entered(body: Node3D) -> void:
@@ -114,6 +132,10 @@ func get_debrief_stats() -> Dictionary:
 
 func _get_role_display() -> String:
 	return role_data.display_name if role_data else "Cesswarden"
+
+
+func apply_knockback(impulse: Vector3) -> void:
+	velocity += impulse
 
 
 # ── Health ────────────────────────────────────────────────────────────────────

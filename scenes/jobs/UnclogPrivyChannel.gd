@@ -41,6 +41,10 @@ func tick(delta: float) -> void:
 		progress = max(0.0, progress - 0.02 * delta)
 
 
+func _handle_press(peer_id: int) -> void:
+	on_player_press(peer_id)
+
+
 func on_player_press(player_id: int) -> void:
 	if not multiplayer.is_server() or is_complete:
 		return

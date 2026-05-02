@@ -25,6 +25,11 @@ const JOB_SCENES := {
 	"burn_leech_nest":      "res://scenes/jobs/BurnLeechNest.tscn",
 	"reset_rat_bells":      "res://scenes/jobs/ResetRatBells.tscn",
 }
+const ROLE_DATA := {
+	&"muckwarden":    "res://resources/muckwarden_role.tres",
+	&"rat_catcher":   "res://resources/rat_catcher_role.tres",
+	&"lantern_friar": "res://resources/lantern_friar_role.tres",
+}
 
 @onready var _room_root: Node3D = $Rooms
 @onready var _job_spawner: Node = $JobSpawner
@@ -45,6 +50,7 @@ func _ready() -> void:
 func _build_level(data: Dictionary) -> void:
 	var rooms: Array = data.rooms
 	var all_job_ids: Array[StringName] = []
+	var exit_world_pos := Vector3.ZERO
 
 	for i in rooms.size():
 		var r: Dictionary = rooms[i]
@@ -63,17 +69,22 @@ func _build_level(data: Dictionary) -> void:
 			_place_job(module, job_id, i)
 			all_job_ids.append(StringName(job_id))
 
-		# Mark exit door
 		if i == data.exit_room_index:
-			_exit_door.global_position = module.global_position
+			exit_world_pos = module.position
 
-	# Required jobs: all of them (scales naturally — more players = more jobs placed)
+	# Position exit door at exit room
+	_exit_door.position = exit_world_pos + Vector3(0, 0, -SewerGenerator.ROOM_SIZE * 0.4)
+
+	# Required jobs: all spawned jobs
 	GameManager.register_jobs(all_job_ids, all_job_ids.size())
 
-	# Bake navmesh after all geometry is placed
+	# Bake navmesh from all room geometry
+	var source_data := NavigationMeshSourceGeometryData3D.new()
+	NavigationServer3D.parse_source_geometry_data(
+		_nav_region.navigation_mesh, source_data, _room_root
+	)
 	NavigationServer3D.bake_from_source_geometry_data(
-		_nav_region.navigation_mesh,
-		NavigationMeshSourceGeometryData3D.new()
+		_nav_region.navigation_mesh, source_data
 	)
 
 
@@ -87,7 +98,7 @@ func _place_props(module: Node3D, prop_ids: Array) -> void:
 		if not PROP_SCENES.has(prop_id):
 			continue
 		var prop: Node3D = (load(PROP_SCENES[prop_id]) as PackedScene).instantiate()
-		prop.global_position = markers[idx].global_position
+		prop.position = (markers[idx] as Marker3D).position
 		module.add_child(prop)
 
 
@@ -98,33 +109,34 @@ func _place_job(module: Node3D, job_id: String, room_index: int) -> void:
 	job.name = "Job_%s_%d" % [job_id, room_index]
 	var anchor := module.get_node_or_null("JobAnchor")
 	if anchor:
-		job.global_position = anchor.global_position
+		job.position = (anchor as Marker3D).position + module.position
 	else:
-		job.position = Vector3(0, 0, 0)
+		job.position = module.position
 	_job_spawner.add_child(job)
 	GameManager.register_job_node(StringName(job_id + "_%d" % room_index), job)
 
 
 func _spawn_players() -> void:
-	# Host spawns a player node for each connected peer (including itself)
-	var peer_ids := multiplayer.get_peers()
+	var peer_ids := multiplayer.get_peers().duplicate()
 	peer_ids.append(multiplayer.get_unique_id())
-	var spawn_points := $PlayerSpawnPoints.get_children()
+	var spawn_points: Array = ($PlayerSpawnPoints as Node3D).get_children()
 	for i in peer_ids.size():
 		var pid: int = peer_ids[i]
 		var role_id: StringName = GameManager.player_roles.get(pid, &"muckwarden")
 		var player_scene: PackedScene = _load_role_scene(role_id)
-		var player: Node3D = player_scene.instantiate()
+		var player := player_scene.instantiate() as PlayerBase
 		player.name = "Player_%d" % pid
 		player.set_multiplayer_authority(pid)
+		if ROLE_DATA.has(role_id):
+			player.role_data = load(ROLE_DATA[role_id])
 		if i < spawn_points.size():
-			player.position = spawn_points[i].position
+			player.position = (spawn_points[i] as Marker3D).position
 		_player_spawner.add_child(player)
 		GameManager.players[pid] = player
 
 
 func _load_role_scene(role_id: StringName) -> PackedScene:
 	match role_id:
-		&"rat_catcher":  return load("res://scenes/player/RatCatcher.tscn")
+		&"rat_catcher":   return load("res://scenes/player/RatCatcher.tscn")
 		&"lantern_friar": return load("res://scenes/player/LanternFriar.tscn")
-		_:               return load("res://scenes/player/Muckwarden.tscn")
+		_:                return load("res://scenes/player/Muckwarden.tscn")

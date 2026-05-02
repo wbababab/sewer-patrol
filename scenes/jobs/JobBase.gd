@@ -111,3 +111,29 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(_body: Node3D) -> void:
 	pass
+
+
+# ── Client→Server RPC bridges ─────────────────────────────────────────────────
+
+@rpc("any_peer", "reliable")
+func request_join(peer_id: int) -> void:
+	if multiplayer.is_server():
+		start_or_join(peer_id)
+
+@rpc("any_peer", "reliable")
+func request_press(peer_id: int) -> void:
+	if multiplayer.is_server():
+		_handle_press(peer_id)
+
+@rpc("any_peer", "unreliable")
+func request_wiggle(peer_id: int, direction: StringName) -> void:
+	if multiplayer.is_server():
+		_handle_wiggle(peer_id, direction)
+
+# Override in subclasses that need active button interaction
+func _handle_press(_peer_id: int) -> void:
+	pass
+
+# Override in subclasses that need wiggle input
+func _handle_wiggle(_peer_id: int, _direction: StringName) -> void:
+	pass

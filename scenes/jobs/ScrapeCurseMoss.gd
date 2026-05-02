@@ -37,6 +37,10 @@ func tick(delta: float) -> void:
 	progress = max(0.0, progress - DECAY_RATE * delta)
 
 
+func _handle_wiggle(peer_id: int, direction: StringName) -> void:
+	on_wiggle(direction, peer_id)
+
+
 # Called by the owning player's input on the host
 func on_wiggle(direction: StringName, player_id: int) -> void:
 	if not multiplayer.is_server() or is_complete:

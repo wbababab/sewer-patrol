@@ -40,7 +40,7 @@ func start_run(roles: Dictionary) -> void:
 @rpc("authority", "call_local", "reliable")
 func _load_level(seed_val: int, roles: Dictionary) -> void:
 	player_roles = roles
-	level_data = {"seed": seed_val}
+	level_data = SewerGenerator.generate(seed_val)
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 	await get_tree().process_frame
 	level_ready.emit()
