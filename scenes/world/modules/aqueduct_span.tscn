@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://aqueduct_span"]
+
+[ext_resource type="Script" path="res://scenes/world/modules/SewModuleBase.gd" id="1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(2.5, 0.3, 12)
+
+[sub_resource type="BoxShape3D" id="BoxShape_1"]
+size = Vector3(2.5, 0.3, 12)
+
+[node name="aqueduct_span" type="Node3D"]
+script = ExtResource("1")
+module_id = "aqueduct_span"
+prop_slots = 2
+can_host_job = false
+
+[node name="WalkwayMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_1")
+position = Vector3(0, 1.5, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape_1")
+position = Vector3(0, 1.5, 0)
+
+[node name="PropSlots" type="Node3D" parent="."]
+
+[node name="Slot0" type="Marker3D" parent="PropSlots"]
+position = Vector3(0, 1.8, -3)
+
+[node name="Slot1" type="Marker3D" parent="PropSlots"]
+position = Vector3(0, 1.8, 3)
+
+[node name="JobAnchor" type="Marker3D" parent="."]
+position = Vector3(0, 1.5, 0)

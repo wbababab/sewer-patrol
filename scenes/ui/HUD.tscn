@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://hud"]
+
+[ext_resource type="Script" path="res://scenes/ui/HUD.gd" id="1"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1")
+
+[node name="HUDRoot" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+
+[node name="JobPanel" type="PanelContainer" parent="HUDRoot"]
+layout_mode = 1
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 12
+offset_top = 12
+offset_right = 220
+offset_bottom = 200
+
+[node name="VBox" type="VBoxContainer" parent="HUDRoot/JobPanel"]
+
+[node name="JobsHeader" type="Label" parent="HUDRoot/JobPanel/VBox"]
+text = "JOBS"
+theme_override_font_sizes/font_size = 13
+modulate = Color(0.91, 0.66, 0.3, 1)
+
+[node name="JobList" type="VBoxContainer" parent="HUDRoot/JobPanel/VBox"]
+theme_override_constants/separation = 4
+
+[node name="HealthBar" type="ProgressBar" parent="HUDRoot"]
+layout_mode = 1
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 12
+offset_top = -40
+offset_right = 200
+offset_bottom = -12
+min_value = 0
+max_value = 100
+value = 100
+show_percentage = false
+
+[node name="RoomCode" type="Label" parent="HUDRoot"]
+layout_mode = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -100
+offset_top = 12
+offset_right = -12
+offset_bottom = 36
+horizontal_alignment = 2
+modulate = Color(0.6, 0.6, 0.7, 1)
+
+[node name="ExitHint" type="Label" parent="HUDRoot"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.15
+anchor_right = 0.5
+anchor_bottom = 0.15
+offset_left = -200
+offset_top = 0
+offset_right = 200
+offset_bottom = 30
+horizontal_alignment = 1
+modulate = Color(0.5, 1.0, 0.6, 1)
+theme_override_font_sizes/font_size = 16

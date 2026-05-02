@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://unclog_privy"]
+
+[ext_resource type="Script" path="res://scenes/jobs/UnclogPrivyChannel.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/jobs/JobBase.tscn" id="2"]
+
+[node name="UnclogPrivyChannel" instance=ExtResource("2")]
+script = ExtResource("1")
