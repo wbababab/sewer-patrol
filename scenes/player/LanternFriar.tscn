@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://lantern_friar"]
+[gd_scene load_steps=3 format=3 uid="uid://c8rkenvsyh6d8"]
 
-[ext_resource type="Script" path="res://scenes/player/LanternFriar.gd" id="1"]
+[ext_resource type="Script" uid="uid://bp30b3sf02tso" path="res://scenes/player/LanternFriar.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/player/PlayerBase.tscn" id="2"]
 
 [node name="LanternFriar" instance=ExtResource("2")]

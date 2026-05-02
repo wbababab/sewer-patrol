@@ -17,7 +17,7 @@ func _ready() -> void:
 	_rebuild_job_list()
 
 	# Connect local player health
-	var local_player := GameManager.players.get(multiplayer.get_unique_id())
+	var local_player: PlayerBase = GameManager.players.get(multiplayer.get_unique_id())
 	if local_player:
 		local_player.property_list_changed.connect(_update_health)
 

@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://player_base"]
+[gd_scene load_steps=6 format=3 uid="uid://bgqyuvvb3p43x"]
 
-[ext_resource type="Script" path="res://scenes/player/PlayerBase.gd" id="1"]
-[ext_resource type="Script" path="res://scripts/utilities/TorchFlicker.gd" id="2"]
+[ext_resource type="Script" uid="uid://ltm0vfu1ut68" path="res://scenes/player/PlayerBase.gd" id="1"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.35
@@ -58,7 +57,7 @@ collision_mask = 4
 shape = SubResource("SphereShape3D_interact")
 
 [node name="NameLabel" type="Label3D" parent="."]
-position = Vector3(0, 2.0, 0)
+position = Vector3(0, 2, 0)
 font_size = 12
 billboard = 1
 

@@ -61,7 +61,7 @@ static func generate(seed_val: int) -> Dictionary:
 	grid[Vector2i(0, 0)] = entry
 	rooms.append(entry)
 
-	for exit_dir in MODULES["small_chamber"].exits:
+	for exit_dir: Vector2i in MODULES["small_chamber"].exits:
 		open_stack.append({"pos": Vector2i(0, 0) + exit_dir, "depth": 1, "parent_pos": Vector2i(0, 0)})
 
 	var target_rooms := rng.randi_range(MIN_ROOMS, MAX_ROOMS)
@@ -84,8 +84,8 @@ static func generate(seed_val: int) -> Dictionary:
 		rooms.append(room)
 
 		# Queue exits, avoiding already-occupied cells
-		for exit_dir in MODULES[module_id].exits:
-			var next_pos := gpos + exit_dir
+		for exit_dir: Vector2i in MODULES[module_id].exits:
+			var next_pos: Vector2i = gpos + exit_dir
 			if not grid.has(next_pos) and rooms.size() < target_rooms:
 				open_stack.append({"pos": next_pos, "depth": depth + 1, "parent_pos": gpos})
 

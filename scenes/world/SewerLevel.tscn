@@ -1,14 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://sewer_level"]
+[gd_scene load_steps=6 format=3 uid="uid://cnti7wfbtyoht"]
 
-[ext_resource type="Script" path="res://scenes/world/SewerLevel.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
+[ext_resource type="Script" uid="uid://j1idhy6w5cs7" path="res://scenes/world/SewerLevel.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://hud" path="res://scenes/ui/HUD.tscn" id="2"]
 
 [sub_resource type="NavigationMesh" id="NavMesh_1"]
-agent/radius = 0.35
-agent/height = 1.7
-agent/max_climb = 0.4
-agent/max_slope = 45.0
-geometry/source_geometry_mode = 0
 
 [sub_resource type="BoxMesh" id="BoxMesh_exit"]
 size = Vector3(2, 3, 0.3)

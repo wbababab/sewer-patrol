@@ -54,7 +54,7 @@ func on_player_press(player_id: int) -> void:
 	for other_id in _ready_timestamps:
 		if other_id == player_id:
 			continue
-		var diff := abs(t - _ready_timestamps[other_id])
+		var diff: float = abs(t - float(_ready_timestamps[other_id]))
 		if diff <= SYNC_WINDOW:
 			# Both in green zone?
 			if GREEN_ZONE_LOW <= _bar_phase and _bar_phase <= GREEN_ZONE_HIGH:

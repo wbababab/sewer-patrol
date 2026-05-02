@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://t_junction"]
+[gd_scene load_steps=4 format=3 uid="uid://bsu4xrgv32ilu"]
 
-[ext_resource type="Script" path="res://scenes/world/modules/SewModuleBase.gd" id="1"]
+[ext_resource type="Script" uid="uid://bbgxvfsmlqkge" path="res://scenes/world/modules/SewModuleBase.gd" id="1"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(12, 3, 8)

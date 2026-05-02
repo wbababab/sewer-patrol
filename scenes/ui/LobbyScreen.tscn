@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://lobby_screen"]
+[gd_scene load_steps=2 format=3 uid="uid://dgocwur5r33k5"]
 
-[ext_resource type="Script" path="res://scenes/ui/LobbyScreen.gd" id="1"]
+[ext_resource type="Script" uid="uid://px8xfyrqf6tx" path="res://scenes/ui/LobbyScreen.gd" id="1"]
 
 [node name="LobbyScreen" type="Control"]
 layout_mode = 3
@@ -58,4 +58,4 @@ custom_minimum_size = Vector2(0, 44)
 [node name="StartButton" type="Button" parent="Panel/VBox"]
 text = "START RUN  (host only)"
 custom_minimum_size = Vector2(0, 44)
-modulate = Color(0.5, 1.0, 0.6, 1)
+modulate = Color(0.5, 1, 0.6, 1)

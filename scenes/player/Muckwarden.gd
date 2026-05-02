@@ -41,7 +41,7 @@ func get_job_speed_bonus(job: Node) -> float:
 
 
 func _check_stagger() -> void:
-	var bodies := $InteractArea.get_overlapping_bodies()
+	var bodies: Array[Node3D] = ($InteractArea as Area3D).get_overlapping_bodies()
 	for body in bodies:
 		if body.is_in_group("players") and body != self:
 			var dist := global_position.distance_to(body.global_position)

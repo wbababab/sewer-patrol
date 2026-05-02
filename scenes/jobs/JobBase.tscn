@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://job_base"]
+[gd_scene load_steps=4 format=3 uid="uid://ce1qu7bom2u7n"]
 
-[ext_resource type="Script" path="res://scenes/jobs/JobBase.gd" id="1"]
+[ext_resource type="Script" uid="uid://kr4rpyfr4n5c" path="res://scenes/jobs/JobBase.gd" id="1"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
 radius = 2.5
