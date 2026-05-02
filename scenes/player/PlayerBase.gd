@@ -22,14 +22,15 @@ var _nearby_jobs: Array = []
 
 
 func _ready() -> void:
-	# Only the owning peer runs physics and shows the camera
+	collision_layer = 2  # jobs' InteractZone masks for layer 2
 	var is_mine := is_multiplayer_authority()
 	_camera.current = is_mine
 	set_physics_process(is_mine)
 
 	if is_mine:
-		_interact_area.body_entered.connect(_on_job_entered)
-		_interact_area.body_exited.connect(_on_job_exited)
+		# Job InteractZones are Area3D, not physics bodies — use area_entered
+		_interact_area.area_entered.connect(_on_job_zone_entered)
+		_interact_area.area_exited.connect(_on_job_zone_exited)
 
 	if role_data:
 		health = role_data.max_health
@@ -57,6 +58,10 @@ func _physics_process(delta: float) -> void:
 		_mesh.rotation.y = lerp_angle(_mesh.rotation.y, atan2(wish_dir.x, wish_dir.z), 12.0 * delta)
 
 	move_and_slide()
+
+	# Camera orbit (Q = rotate left, R = rotate right)
+	var cam_turn := Input.get_axis("cam_left", "cam_right")
+	_camera_arm.rotation.y -= cam_turn * 2.0 * delta
 
 	# Interact
 	if Input.is_action_just_pressed("interact"):
@@ -107,13 +112,15 @@ func _forward_wiggle(direction: StringName) -> void:
 			break
 
 
-func _on_job_entered(body: Node3D) -> void:
-	if body.is_in_group("jobs"):
-		_nearby_jobs.append(body)
+func _on_job_zone_entered(area: Area3D) -> void:
+	var job := area.get_parent()
+	if job and job.is_in_group("jobs"):
+		_nearby_jobs.append(job)
 
 
-func _on_job_exited(body: Node3D) -> void:
-	_nearby_jobs.erase(body)
+func _on_job_zone_exited(area: Area3D) -> void:
+	var job := area.get_parent()
+	_nearby_jobs.erase(job)
 
 
 # ── Role hooks (override in subclasses) ───────────────────────────────────────

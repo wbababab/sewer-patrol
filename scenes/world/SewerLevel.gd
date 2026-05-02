@@ -72,7 +72,7 @@ func _build_level(data: Dictionary) -> void:
 		if i == data.exit_room_index:
 			exit_world_pos = module.position
 
-	# Position exit door at exit room
+	# Position exit door at exit room — use local position to avoid transform issues
 	_exit_door.position = exit_world_pos + Vector3(0, 0, -SewerGenerator.ROOM_SIZE * 0.4)
 
 	# Required jobs: all spawned jobs

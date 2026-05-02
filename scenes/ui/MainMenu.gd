@@ -2,6 +2,7 @@ extends Control
 
 @onready var _host_btn: Button = $VBox/HostButton
 @onready var _join_btn: Button = $VBox/JoinButton
+@onready var _solo_btn: Button = $VBox/SoloButton
 @onready var _code_field: LineEdit = $VBox/CodeField
 @onready var _status_label: Label = $VBox/StatusLabel
 
@@ -9,9 +10,20 @@ extends Control
 func _ready() -> void:
 	_host_btn.pressed.connect(_on_host)
 	_join_btn.pressed.connect(_on_join)
+	_solo_btn.pressed.connect(_on_solo)
 	NetworkManager.room_created.connect(_on_room_created)
 	NetworkManager.room_joined.connect(_on_room_joined)
 	NetworkManager.connection_failed.connect(_on_fail)
+
+
+func _on_solo() -> void:
+	# Bypass signaling — spin up a local ENet server for single-player testing
+	NetworkManager.is_host = true
+	NetworkManager.room_code = "SOLO"
+	var peer := ENetMultiplayerPeer.new()
+	peer.create_server(9999)
+	multiplayer.multiplayer_peer = peer
+	get_tree().change_scene_to_file("res://scenes/ui/LobbyScreen.tscn")
 
 
 func _on_host() -> void:
