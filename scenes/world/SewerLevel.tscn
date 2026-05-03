@@ -81,4 +81,4 @@ text = "EXIT — LOCKED"
 font_size = 14
 billboard = 1
 
-[node name="HUD" instance=ExtResource("3")]
+[node name="HUD" instance=ExtResource("3") parent="."]
