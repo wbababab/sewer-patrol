@@ -72,8 +72,8 @@ func _build_level(data: Dictionary) -> void:
 		if i == data.exit_room_index:
 			exit_world_pos = module.position
 
-	# Position exit door at exit room — use local position to avoid transform issues
-	_exit_door.position = exit_world_pos + Vector3(0, 0, -SewerGenerator.ROOM_SIZE * 0.4)
+	# Position exit door at exit room — door mesh is 3 units tall, place center at y=1.5 so it sits on floor
+	_exit_door.position = exit_world_pos + Vector3(0, 1.5, -SewerGenerator.ROOM_SIZE * 0.4)
 
 	# Required jobs: all spawned jobs
 	GameManager.register_jobs(all_job_ids, all_job_ids.size())
