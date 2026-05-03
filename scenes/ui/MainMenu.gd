@@ -8,6 +8,7 @@ extends Control
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_host_btn.pressed.connect(_on_host)
 	_join_btn.pressed.connect(_on_join)
 	_solo_btn.pressed.connect(_on_solo)

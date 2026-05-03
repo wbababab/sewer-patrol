@@ -12,6 +12,7 @@ var current_state: StringName = &"idle"
 
 var _special_timer: float = 0.0
 var _nearby_jobs: Array = []
+var _cam_pitch: float = -0.3
 
 @onready var _camera_arm: SpringArm3D = $CameraArm
 @onready var _camera: Camera3D = $CameraArm/Camera3D
@@ -31,6 +32,8 @@ func _ready() -> void:
 		# Job InteractZones are Area3D, not physics bodies — use area_entered
 		_interact_area.area_entered.connect(_on_job_zone_entered)
 		_interact_area.area_exited.connect(_on_job_zone_exited)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		_camera_arm.rotation.x = _cam_pitch
 
 	if role_data:
 		health = role_data.max_health
@@ -38,6 +41,27 @@ func _ready() -> void:
 		_apply_role_color()
 
 	add_to_group("players")
+
+
+func _input(event: InputEvent) -> void:
+	if not is_multiplayer_authority():
+		return
+	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+		_camera_arm.rotation.y -= event.relative.x * 0.004
+		_cam_pitch = clamp(_cam_pitch - event.relative.y * 0.003, -1.2, 0.2)
+		_camera_arm.rotation.x = _cam_pitch
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+				_try_interact()
+			else:
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			_camera_arm.spring_length = max(2.0, _camera_arm.spring_length - 0.5)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			_camera_arm.spring_length = min(12.0, _camera_arm.spring_length + 0.5)
+	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func _physics_process(delta: float) -> void:

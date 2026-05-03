@@ -17,6 +17,7 @@ var _selected_role: StringName = &"muckwarden"
 
 
 func _ready() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_room_code_label.text = "Room: %s" % NetworkManager.room_code
 
 	_ready_btn.pressed.connect(_on_ready)
