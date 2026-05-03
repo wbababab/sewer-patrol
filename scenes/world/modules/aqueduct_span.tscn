@@ -21,22 +21,22 @@ can_host_job = false
 
 [node name="WalkwayMesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("BoxMesh_1")
-position = Vector3(0, 1.5, 0)
+position = Vector3(0, -0.15, 0)
 surface_material_override/0 = SubResource("FloorMat_1")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("BoxShape_1")
-position = Vector3(0, 1.5, 0)
+position = Vector3(0, -0.15, 0)
 
 [node name="PropSlots" type="Node3D" parent="."]
 
 [node name="Slot0" type="Marker3D" parent="PropSlots"]
-position = Vector3(0, 1.8, -3)
+position = Vector3(0, 0, -3)
 
 [node name="Slot1" type="Marker3D" parent="PropSlots"]
-position = Vector3(0, 1.8, 3)
+position = Vector3(0, 0, 3)
 
 [node name="JobAnchor" type="Marker3D" parent="."]
-position = Vector3(0, 1.5, 0)
+position = Vector3(0, 0, 0)
