@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var _job_list: VBoxContainer = $HUDRoot/JobPanel/JobList
+@onready var _job_list: VBoxContainer = $HUDRoot/JobPanel/VBox/JobList
 @onready var _health_bar: ProgressBar = $HUDRoot/HealthBar
 @onready var _room_code_label: Label = $HUDRoot/RoomCode
 @onready var _exit_hint: Label = $HUDRoot/ExitHint
